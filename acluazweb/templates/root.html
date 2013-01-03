@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>ACLU Arizon Racial Profiling Reports</title>
+    <title>{% block title %}{% endblock %}ACLU AZ</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -26,13 +26,20 @@
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/static/assets/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/static/assets/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="/static/assets/ico/apple-touch-icon-57-precomposed.png">
-    <link rel="shortcut icon" href="/static/assets/ico/favicon.png">
+    <link rel="shortcut icon" href="http://www.acluaz.org/sites/default/files/aclu_favicon.ico">
 
     <style>
       .navbar-inverse
       .navbar-inner {
-          background-color: #FAFAFA;
-          background-image: linear-gradient(to bottom, #25547A, #25547A);
+          background-color: #25547A;
+          background-image: none;
+          background-repeat: repeat-x;
+          border-width: 0px;
+    }
+
+      .navbar-inner {
+          background-color: #25547A
+          background-image: none;
           background-repeat: repeat-x;
           border-width: 0px;
     }
@@ -66,32 +73,17 @@
           <a class="brand" href="/"><img src="http://www.optodesign.com/aclu/images/foot.gif"></a>
           <div class="nav-collapse collapse">
             <ul class="nav">
-              <li class="active"><a href="#">Reports</a></li>
-              <li><a href="#about">Map</a></li>
-              <li><a href="#contact">Contact</a></li>
+              <li {% if reportactive %} class="active" {% endif %}><a href="/">Reports</a></li>
+              <li {% if mapactive %}class="active" {% endif %} ><a href="/map">Map</a></li>
+              <li {% if contactactive %}class="active" {% endif %}> <a href="/contact">Contact</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
       </div>
     </div>
 
-    <div class="container">
-
-      <div class="row">
-
-        <div class="span8">
-          <h1>Recent Reports</h1>
-          <p>This is where the big list of reports will go.</p>
-        </div>
-
-        <div class="span4">
-          <h3>Map Goes Here</h3>
-          <p>There is where the report will go.</p>
-        </div>
-
-      </div>
-
-    </div> <!-- /container -->
+    {% block bodyblock %}
+    {% endblock bodyblock %}
 
     <!-- Le javascript
     ================================================== -->
@@ -109,6 +101,9 @@
     <script src="/static/assets/js/bootstrap-collapse.js"></script>
     <script src="/static/assets/js/bootstrap-carousel.js"></script>
     <script src="/static/assets/js/bootstrap-typeahead.js"></script>
+
+    {% block scripts %}
+    {% endblock %}
 
   </body>
 </html>
