@@ -1,0 +1,33 @@
+{% extends 'root.html' %}
+
+{% block title %}New Report - {% endblock %}
+
+{% block bodyblock %}
+
+    <div class="container">
+
+      <div class="row">
+
+        <div class="span8">
+          <h1>New Report</h1>
+
+          <form method="post">
+            {% csrf_token %}
+            
+            {{ form.as_p }}
+
+            <button class="btn btn-primary" class="submit"><i class="icon-check icon-white"></i> Save Report</button>
+
+          </form>
+        </div>
+
+        <div class="span4">
+          <h3>Woot</h3>
+          <p>Hell yeah.</p>
+        </div>
+
+      </div>
+
+    </div> <!-- /container -->
+
+{% endblock %}
