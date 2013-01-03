@@ -23,9 +23,9 @@
               <tbody>
                 {% for r in reports %}
 
-                <tr {% if r.approved %}class="success"{% endif %}>
+                <tr {% if r.approved %}class="success"{% endif %} {% if r.red_flagged %}class="error"{% endif %}>
                   <td></td>
-                  <td><i>{{r.location}}</i></td>
+                  <td><a href="/r/{{r.pk}}"><i>{{r.location}}</i></a></td>
                   <td>{{r.description}}</td>
                   <td><a href="/r/{{r.pk}}">{{r.date}}</a></td>
                 </tr>
@@ -34,6 +34,11 @@
 
               </tbody>
           </table>
+
+          <div class="pull-right">
+            <a href="/">New</a> / <a href="/all">All</a> / <a href="/approved">Approved</a>
+          </div>
+
         </div>
 
         <div class="span4">

@@ -11,6 +11,18 @@
         <div class="span8">
           <h1>Report from <i>{{report.location}}</i></h1>
 
+          {% if report.approved %}
+            <div class="alert alert-success">
+            This report is <b>approved</b>.
+            </div>
+          {% endif %}
+
+          {% if report.red_flagged %}
+            <div class="alert alert-danger">
+            This report is <b>flagged</b>.
+            </div>
+          {% endif %}
+
           <br />
 
           <blockquote>
@@ -23,8 +35,8 @@
           <h3>Map</h3>
           <p><h4>{{report.location}}</h4></p>
           <p><i>({{report.lat}}, {{report.lon}})</i></p>
-          <button class="btn btn-success"><i class="icon-check icon-white"></i> Approve Report</button>
-          <button class="btn btn-danger"><i class="icon-remove icon-white"></i> Hide Report</button>
+          <a href="/approve/{{report.pk}}" class="btn btn-success"><i class="icon-check icon-white"></i> Approve Report</a>
+          <a href="/flag/{{report.pk}}" class="btn btn-danger"><i class="icon-remove icon-white"></i> Hide Report</a>
         </div>
 
       </div>
