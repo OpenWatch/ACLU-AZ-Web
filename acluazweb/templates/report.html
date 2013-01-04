@@ -26,8 +26,13 @@
           <br />
 
           <blockquote>
-            <p>{{report.description}}</p>
+            <div>
+              <p class="lead">{{report.description}}</p>
+            </div>
           </blockquote>
+
+          <p><b>Sent by:</b> <a href="mailto:{{report.email}}">{{report.email}}</a></p>
+          <i>{{report.date}}</i>
 
         </div>
 

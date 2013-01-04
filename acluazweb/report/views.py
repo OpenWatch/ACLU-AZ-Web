@@ -10,21 +10,21 @@ from report.models import Report, ReportForm
 
 def root(request):
 
-    reports = Report.objects.filter(red_flagged=False)
+    reports = Report.objects.filter(red_flagged=False).order_by('-date')
 
     return render_to_response('home.html', { 'reports': reports, 'reportactive': True, 'numtotal': len(reports), 'numweek': 0} , 
         context_instance=RequestContext(request))
 
 def all(request):
 
-    reports = Report.objects.filter()
+    reports = Report.objects.filter().order_by('-date')
 
     return render_to_response('home.html', { 'reports': reports, 'reportactive': True, 'numtotal': len(reports), 'numweek': 0} , 
         context_instance=RequestContext(request))
 
 def approved(request):
 
-    reports = Report.objects.filter(approved=True)
+    reports = Report.objects.filter(approved=True).order_by('-date')
 
     return render_to_response('home.html', { 'reports': reports, 'reportactive': True, 'numtotal': len(reports), 'numweek': 0} , 
         context_instance=RequestContext(request))
