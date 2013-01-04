@@ -39,12 +39,12 @@ class Report(models.Model):
     ##
     #########
 
-    agency = models.CharField(max_length=200, blank=True)
+    agency = models.CharField(max_length=200, null=True, blank=True)
     date = models.DateTimeField('Date Submitted', blank=True, default=datetime.now)
     location = models.CharField(max_length='200', null=True, blank=True)
     lat = models.FloatField(null=True, blank=True)
     lon = models.FloatField(null=True, blank=True)
-    description = models.TextField(blank=True)
+    description = models.TextField(null=True, blank=True)
 
     #########
     ##
@@ -52,16 +52,16 @@ class Report(models.Model):
     ##
     #########
 
-    address_1 = models.CharField(max_length=200, blank=True)
-    address_2 = models.CharField(max_length=200, blank=True)
-    alternate = models.CharField(max_length=200, blank=True)
-    email = models.CharField(max_length=200, blank=True)
-    first_name = models.CharField(max_length=200, blank=True)
-    last_name = models.CharField(max_length=200, blank=True)
-    phone = models.CharField(max_length=200, blank=True)
-    city = models.CharField(max_length=200, blank=True)
-    state = models.CharField(max_length=200, blank=True)
-    zip_code = models.CharField(max_length=200, blank=True)
+    address_1 = models.CharField(max_length=200, null=True, blank=True)
+    address_2 = models.CharField(max_length=200, null=True, blank=True)
+    alternate = models.CharField(max_length=200, null=True, blank=True)
+    email = models.CharField(max_length=200, null=True, blank=True)
+    first_name = models.CharField(max_length=200, null=True, blank=True)
+    last_name = models.CharField(max_length=200, null=True, blank=True)
+    phone = models.CharField(max_length=200, null=True, blank=True)
+    city = models.CharField(max_length=200, null=True, blank=True)
+    state = models.CharField(max_length=200, null=True, blank=True)
+    zip_code = models.CharField(max_length=200, null=True, blank=True)
 
     #########
     ##
@@ -71,10 +71,10 @@ class Report(models.Model):
 
     approved = models.BooleanField(default=False, blank=True)
     red_flagged = models.BooleanField(default=False, blank=True)
-    uuid = models.CharField(max_length=200, blank=True)
+    uuid = models.CharField(max_length=200, null=True, blank=True)
 
     def __unicode__(self):
-        return "Report " + str(self.pk) + ": " + str(self.agency) + ', ' + self.location 
+        return "Report " + str(self.pk) + ": " + str(self.agency) + ', ' + str(self.location)
 
 class ReportForm(ModelForm):
 

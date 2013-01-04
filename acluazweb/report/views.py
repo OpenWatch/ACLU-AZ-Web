@@ -8,7 +8,10 @@ from django.shortcuts import get_object_or_404, render_to_response
 from django.db.models import Q
 
 import datetime
+time_format = '%Y-%m-%d %H:%M:%S'
+
 import json
+import pytz
 
 from report.models import Report, ReportForm
 
@@ -146,34 +149,35 @@ def new(request):
 def submit(request):
 
     if request.method != 'POST':
-        return HttpResponse("{'success': false, 'reason': 'I only speak POST'}", mimetype='application/json')
+        return HttpResponse(json.dumps({'success': False, 'reason': 'I only speak POST'}), mimetype='application/json')
 
     try:
         json_data = json.loads(request.raw_post_data)
     except Exception, e:
-        return HttpResponse("{'success': false, 'reason': 'Bad JSON.', 'exception': '" + str(e) + "'}", mimetype='application/json')
+        return HttpResponse(json.dumps({'success': False, 'reason': 'Bad JSON.', 'exception': str(e)}), mimetype='application/json')
 
     try:
         report = Report()
-        report.agency = json_data['report']['agency']
-        report.description = json_data['report']['description']
-        report.lat = json_data['report']['latitude']
-        report.lon = json_data['report']['longitude']
-        report.uuid = json_data['report']['uuid']
-        report.address_1 = json_data['user']['address_1']
-        report.address_2 = json_data['user']['address_2']
-        report.alternate = json_data['user']['alternate']
-        report.first_name = json_data['user']['first_name']
-        report.last_name = json_data['user']['last_name']
-        report.phone = json_data['user']['phone']
-        report.city = json_data['user']['city']
-        report.state = json_data['user']['state']
-        report.zip = json_data['user']['zip']
+        report.agency = json_data['report'].get('agency', None)
+        report.description = json_data['report'].get('description', None)
+        report.lat = json_data['report'].get('latitude', None)
+        report.lon = json_data['report'].get('longitude', None)
+        report.date = string_to_date(json_data['report']['date'])
+        report.uuid = json_data['report'].get('uuid', None)
+        report.address_1 = json_data['user'].get('address_1', None)
+        report.address_2 = json_data['user'].get('address_2', None)
+        report.alternate = json_data['user'].get('alternate', None)
+        report.first_name = json_data['user'].get('first_name', None)
+        report.last_name = json_data['user'].get('last_name', None)
+        report.phone = json_data['user'].get('phone', None)
+        report.city = json_data['user'].get('city', None)
+        report.state = json_data['user'].get('state', None)
+        report.zip = json_data['user'].get('zip', None)
         report.save()
     except Exception, e:
-        return HttpResponse("{'success': false, 'reason': 'Improperly formatted data.', 'exception': '" + str(e) + "'}", mimetype='application/json')
+        return HttpResponse(json.dumps({'success': False, 'reason': 'Improperly formatted data.', 'exception': str(e) }), mimetype='application/json')
 
-    return HttpResponse("{'success': true, 'report_id': " + str(report.id) + "}", mimetype='application/json')
+    return HttpResponse(json.dumps({'success': True, 'report_id': report.id }), mimetype='application/json')
 
 ##############
 ##
@@ -185,3 +189,26 @@ def contact(request):
 
     return render_to_response('contact.html', { 'contactactive': True }, 
         context_instance=RequestContext(request))
+
+#############
+##
+## Util
+##
+#############
+
+def string_to_date(time_str):
+    date = datetime.datetime.strptime(time_str, time_format)
+    tz = pytz.utc
+    utc_date = tz.normalize(tz.localize(date))
+    return utc_date
+
+def date_to_string(date):
+    if date == None:
+        return None
+    utc_date = date
+    if date.tzinfo != None:
+        utc_date = date.astimezone(pytz.utc)
+    else:
+        date.replace(tzinfo=tzutc())
+    date_string = utc_date.strftime(time_format)
+    return date_string
