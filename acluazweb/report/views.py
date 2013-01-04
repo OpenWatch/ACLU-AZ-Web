@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404, render_to_response, Http404, Htt
 from django.template import loader, RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404, render_to_response
+from django.db.models import Q
 
 import datetime
 import json
@@ -113,7 +114,9 @@ def flag(request, rid):
 
 def map(request):
 
-    return render_to_response('map.html', { 'mapactive': True }, 
+    reports = Report.objects.filter(red_flagged=False).filter(~Q(lat=None)).filter(~Q(lon=None)).order_by('-date')
+
+    return render_to_response('map.html', { 'reports': reports, 'mapactive': True }, 
         context_instance=RequestContext(request))
 
 ##################
