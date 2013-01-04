@@ -80,7 +80,7 @@ class ReportForm(ModelForm):
 
     class Meta:
         model = Report
-        fields = ('agency', 'location', 'lat', 'lon', 'first_name', 'last_name', 'phone', 'city', 'state', 'email', 'address_1', 'address_2', 'description',)
+        fields = ('agency', 'location', 'lat', 'lon', 'first_name', 'last_name', 'phone', 'email', 'alternate', 'city', 'state', 'address_1', 'address_2', 'description',)
 
     def save(self):
         if not self.instance:
@@ -98,6 +98,7 @@ class ReportForm(ModelForm):
         self.bound_object.city = self.cleaned_data['city']
         self.bound_object.state = self.cleaned_data['state']
         self.bound_object.phone = self.cleaned_data['phone']
+        self.bound_object.alternate = self.cleaned_data['alternate']
         self.bound_object.address_1 = self.cleaned_data['address_1']
         self.bound_object.address_2 = self.cleaned_data['address_2']
         self.bound_object.description = self.cleaned_data['description']

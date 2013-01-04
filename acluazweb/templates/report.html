@@ -40,6 +40,7 @@
               <h4><a href="mailto:{{report.email}}">{{report.first_name}} {{report.last_name}}</a><br /></h4>
               <abbr title="Email">E:</abbr> <a href="mailto:{{report.email}}">{{report.email}}</a><br />
               <abbr title="Phone">P:</abbr> <b>{{report.phone}}</b><br />
+              {%if report.alternate %}<abbr title="Alternate">A:</abbr> <b>{{report.alternate}}</b><br />{% endif %}
               <br />
               {{report.address_1}}<br />
               {{report.address_2}}<br />
