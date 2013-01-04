@@ -31,8 +31,24 @@
             </div>
           </blockquote>
 
-          <p><b>Sent by:</b> <a href="mailto:{{report.email}}">{{report.email}}</a></p>
-          <i>{{report.date}}</i>
+          <hr />
+
+          <p>
+            <address>
+              <h4><a href="mailto:{{report.email}}">{{report.first_name}} {{report.last_name}}</a><br /></h4>
+              <abbr title="Email">E:</abbr> <a href="mailto:{{report.email}}">{{report.email}}</a><br />
+              <abbr title="Phone">P:</abbr> <b>{{report.phone}}</b><br />
+              <br />
+              {{report.address_1}}<br />
+              {{report.address_2}}<br />
+              {{report.city}} {{report.state}}<br />
+
+            </address>
+          </p>
+
+          <p>
+            <i>{{report.date}}</i>
+          </p>
 
         </div>
 

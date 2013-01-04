@@ -73,11 +73,14 @@ class Report(models.Model):
     red_flagged = models.BooleanField(default=False, blank=True)
     uuid = models.CharField(max_length=200, blank=True)
 
+    def __unicode__(self):
+        return "Report " + str(self.pk) + ": " + str(self.agency) + ', ' + self.location 
+
 class ReportForm(ModelForm):
 
     class Meta:
         model = Report
-        fields = ('agency', 'email', 'location', 'lat', 'lon', 'description',)
+        fields = ('agency', 'location', 'lat', 'lon', 'first_name', 'last_name', 'phone', 'city', 'state', 'email', 'address_1', 'address_2', 'description',)
 
     def save(self):
         if not self.instance:
@@ -90,6 +93,13 @@ class ReportForm(ModelForm):
         self.bound_object.location = self.cleaned_data['location']
         self.bound_object.lat = self.cleaned_data['lat']
         self.bound_object.lon = self.cleaned_data['lon']
+        self.bound_object.first_name = self.cleaned_data['first_name']
+        self.bound_object.last_name = self.cleaned_data['last_name']
+        self.bound_object.city = self.cleaned_data['city']
+        self.bound_object.state = self.cleaned_data['state']
+        self.bound_object.phone = self.cleaned_data['phone']
+        self.bound_object.address_1 = self.cleaned_data['address_1']
+        self.bound_object.address_2 = self.cleaned_data['address_2']
         self.bound_object.description = self.cleaned_data['description']
 
         self.bound_object.save()
