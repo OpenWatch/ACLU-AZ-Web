@@ -34,7 +34,6 @@
             
             <thead>
                 <tr>
-                  <th></th>
                   <th>Location</th>
                   <th>Body</th>
                   <th>Date</th>
@@ -44,7 +43,6 @@
                 {% for r in reports %}
 
                 <tr {% if r.approved %}class="success"{% endif %} {% if r.red_flagged %}class="error"{% endif %}>
-                  <td></td>
                   <td><a href="/r/{{r.pk}}"><i>{{r.location}}</i></a></td>
                   <td>{{r.description}}</td>
                   <td><a href="/r/{{r.pk}}">{{r.date}}</a></td>

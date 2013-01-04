@@ -6,9 +6,15 @@ from django.template import loader, RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404, render_to_response
 
+import json
+
 from report.models import Report, ReportForm
 
-# Main list view
+###############
+##
+## Main list views
+##
+###############
 
 def root(request):
     reports = Report.objects.filter(red_flagged=False).order_by('-date')
@@ -37,7 +43,11 @@ def search(request, term=None):
     return render_to_response('home.html', { 'reports': reports, 'reportactive': True, 'numtotal': len(reports), 'numweek': 0, 'term': term} , 
         context_instance=RequestContext(request))
 
-# Inidividual report view and support
+##############
+##
+## Inidividual report views and related
+##
+#############
 
 def report(request, rid):
 
@@ -70,30 +80,80 @@ def flag(request, rid):
 
     return HttpResponseRedirect('/r/' + str(report.pk))
 
+###############
+##
+## Map
+##
+###############
+
 def map(request):
 
     return render_to_response('map.html', { 'mapactive': True }, 
         context_instance=RequestContext(request))
 
-def contact(request):
-
-    return render_to_response('contact.html', { 'contactactive': True }, 
-        context_instance=RequestContext(request))
+##################
+##
+## Submission
+##
+################
 
 def new(request):
 
     form = ReportForm()
 
-    if request.method == 'POST': # If the form has been submitted...
-        form = ReportForm(request.POST, request.FILES) # A form bound to the POST data
+    if request.method == 'POST':
+        form = ReportForm(request.POST, request.FILES)
         if form.is_valid(): 
             form.save()
-            return HttpResponseRedirect('/') # Redirect after POST
+            return HttpResponseRedirect('/') 
         else:
             pass
-            #print "Shiiiiit"
     else:
         form = ReportForm()
 
     return render_to_response('new.html', { 'form': form }, 
+        context_instance=RequestContext(request))
+
+@csrf_exempt
+def submit(request):
+
+    if request.method != 'POST':
+        return HttpResponse("{'success': false, 'reason': 'I only speak POST'}", mimetype='application/json')
+
+    try:
+        json_data = json.loads(request.raw_post_data)
+    except Exception, e:
+        return HttpResponse("{'success': false, 'reason': 'Bad JSON.', 'exception': '" + str(e) + "'}", mimetype='application/json')
+
+    try:
+        report = Report()
+        report.agency = json_data['report']['agency']
+        report.description = json_data['report']['description']
+        report.lat = json_data['report']['latitude']
+        report.lon = json_data['report']['longitude']
+        report.uuid = json_data['report']['uuid']
+        report.address_1 = json_data['user']['address_1']
+        report.address_2 = json_data['user']['address_2']
+        report.alternate = json_data['user']['alternate']
+        report.first_name = json_data['user']['first_name']
+        report.last_name = json_data['user']['last_name']
+        report.phone = json_data['user']['phone']
+        report.city = json_data['user']['city']
+        report.state = json_data['user']['state']
+        report.zip = json_data['user']['zip']
+        report.save()
+    except Exception, e:
+        return HttpResponse("{'success': false, 'reason': 'Improperly formatted data.', 'exception': '" + str(e) + "'}", mimetype='application/json')
+
+    return HttpResponse("{'success': true, 'report_id': " + str(report.id) + "}", mimetype='application/json')
+
+##############
+##
+## Misc
+##
+#############
+
+def contact(request):
+
+    return render_to_response('contact.html', { 'contactactive': True }, 
         context_instance=RequestContext(request))
