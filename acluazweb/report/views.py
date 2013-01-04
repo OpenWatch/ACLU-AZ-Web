@@ -8,26 +8,36 @@ from django.shortcuts import get_object_or_404, render_to_response
 
 from report.models import Report, ReportForm
 
+# Main list view
+
 def root(request):
-
     reports = Report.objects.filter(red_flagged=False).order_by('-date')
-
     return render_to_response('home.html', { 'reports': reports, 'reportactive': True, 'numtotal': len(reports), 'numweek': 0} , 
         context_instance=RequestContext(request))
 
 def all(request):
-
     reports = Report.objects.filter().order_by('-date')
-
     return render_to_response('home.html', { 'reports': reports, 'reportactive': True, 'numtotal': len(reports), 'numweek': 0} , 
         context_instance=RequestContext(request))
 
 def approved(request):
-
     reports = Report.objects.filter(approved=True).order_by('-date')
-
     return render_to_response('home.html', { 'reports': reports, 'reportactive': True, 'numtotal': len(reports), 'numweek': 0} , 
         context_instance=RequestContext(request))
+
+def search(request, term=None):
+
+    if not term:
+        term = str(request.GET['term'])
+
+    if not term:
+        return HttpResponseRedirect('/')
+
+    reports = Report.objects.filter(description__icontains=term).order_by('-date')
+    return render_to_response('home.html', { 'reports': reports, 'reportactive': True, 'numtotal': len(reports), 'numweek': 0, 'term': term} , 
+        context_instance=RequestContext(request))
+
+# Inidividual report view and support
 
 def report(request, rid):
 
