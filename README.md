@@ -3,6 +3,10 @@ ACLU-AZ-Web
 
 ACLU-AZ-Web
 
+# Screenshots
+
+![screenshot](http://i.imgur.com/jlyOo.png)
+
 # Installation
 
 > source ./env/bin/activate
