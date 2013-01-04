@@ -6,6 +6,7 @@ from django.template import loader, RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404, render_to_response
 
+import datetime
 import json
 
 from report.models import Report, ReportForm
@@ -18,17 +19,35 @@ from report.models import Report, ReportForm
 
 def root(request):
     reports = Report.objects.filter(red_flagged=False).order_by('-date')
-    return render_to_response('home.html', { 'reports': reports, 'reportactive': True, 'numtotal': len(reports), 'numweek': 0} , 
+
+    today = datetime.datetime.today()
+    days = datetime.timedelta(days=7)
+    begin = today - days
+    recent_reports = Report.objects.filter(red_flagged=False).filter(date__range=(begin, today))
+
+    return render_to_response('home.html', { 'reports': reports, 'reportactive': True, 'numtotal': len(reports), 'numweek': len(recent_reports)} , 
         context_instance=RequestContext(request))
 
 def all(request):
     reports = Report.objects.filter().order_by('-date')
-    return render_to_response('home.html', { 'reports': reports, 'reportactive': True, 'numtotal': len(reports), 'numweek': 0} , 
+
+    today = datetime.datetime.today()
+    days = datetime.timedelta(days=7)
+    begin = today - days
+    recent_reports = Report.objects.filter(date__range=(begin, today))
+
+    return render_to_response('home.html', { 'reports': reports, 'reportactive': True, 'numtotal': len(reports), 'numweek': len(recent_reports)} , 
         context_instance=RequestContext(request))
 
 def approved(request):
     reports = Report.objects.filter(approved=True).order_by('-date')
-    return render_to_response('home.html', { 'reports': reports, 'reportactive': True, 'numtotal': len(reports), 'numweek': 0} , 
+
+    today = datetime.datetime.today()
+    days = datetime.timedelta(days=7)
+    begin = today - days
+    recent_reports = Report.objects.filter(approved=True).filter(date__range=(begin, today))
+
+    return render_to_response('home.html', { 'reports': reports, 'reportactive': True, 'numtotal': len(reports), 'numweek': len(recent_reports)} , 
         context_instance=RequestContext(request))
 
 def search(request, term=None):
@@ -40,7 +59,13 @@ def search(request, term=None):
         return HttpResponseRedirect('/')
 
     reports = Report.objects.filter(description__icontains=term).order_by('-date')
-    return render_to_response('home.html', { 'reports': reports, 'reportactive': True, 'numtotal': len(reports), 'numweek': 0, 'term': term} , 
+
+    today = datetime.datetime.today()
+    days = datetime.timedelta(days=7)
+    begin = today - days
+    recent_reports = Report.objects.filter(description__icontains=term).filter(date__range=(begin, today))
+
+    return render_to_response('home.html', { 'reports': reports, 'reportactive': True, 'numtotal': len(reports), 'numweek': len(recent_reports), 'term': term} , 
         context_instance=RequestContext(request))
 
 ##############
