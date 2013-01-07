@@ -13,6 +13,8 @@ ACLU-AZ-Web
 
 > pip install django
 
+> pip install pytz
+
 # License
 
 GNU Affero General Public License, version 3.
