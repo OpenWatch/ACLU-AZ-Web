@@ -74,7 +74,7 @@ class Report(models.Model):
     uuid = models.CharField(max_length=200, null=True, blank=True)
 
     def __unicode__(self):
-        return "Report " + str(self.pk) + ": " + str(self.agency) + ', ' + str(self.location)
+        return "Report " + str(self.pk)
 
 class ReportForm(ModelForm):
 
