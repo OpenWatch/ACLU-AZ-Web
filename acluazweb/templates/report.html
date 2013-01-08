@@ -58,6 +58,8 @@
         <div class="span4">
           <h3>Map</h3>
 
+          {% if report.lat %}
+
             <script type="text/javascript">
 
             function loadMap(){
@@ -92,8 +94,10 @@
           <div id="map" style="height: 300px; opacity: .8; margin-left: 0px;"  >
           </div>
 
+          {% endif %}
+
           <p><h4>{{report.location}}</h4></p>
-          <p><i>({{report.lat}}, {{report.lon}})</i></p>
+          {% if report.lat %}<p><i>({{report.lat}}, {{report.lon}})</i></p>{% endif %}
           <a href="/approve/{{report.pk}}" class="btn btn-success"><i class="icon-check icon-white"></i> Approve Report</a>
           <a href="/flag/{{report.pk}}" class="btn btn-danger"><i class="icon-remove icon-white"></i> Hide Report</a>
         </div>
