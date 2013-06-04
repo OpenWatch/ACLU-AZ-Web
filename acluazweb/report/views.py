@@ -21,6 +21,8 @@ from report.models import Report, ReportForm
 ##
 ###############
 
+
+@login_required
 def root(request):
     reports = Report.objects.filter(red_flagged=False).order_by('-date')
 
@@ -32,6 +34,8 @@ def root(request):
     return render_to_response('home.html', { 'reports': reports, 'reportactive': True, 'numtotal': len(reports), 'numweek': len(recent_reports)} , 
         context_instance=RequestContext(request))
 
+
+@login_required
 def all(request):
     reports = Report.objects.filter().order_by('-date')
 
@@ -43,6 +47,8 @@ def all(request):
     return render_to_response('home.html', { 'reports': reports, 'reportactive': True, 'numtotal': len(reports), 'numweek': len(recent_reports)} , 
         context_instance=RequestContext(request))
 
+
+@login_required
 def approved(request):
     reports = Report.objects.filter(approved=True).order_by('-date')
 
@@ -54,6 +60,8 @@ def approved(request):
     return render_to_response('home.html', { 'reports': reports, 'reportactive': True, 'numtotal': len(reports), 'numweek': len(recent_reports)} , 
         context_instance=RequestContext(request))
 
+
+@login_required
 def search(request, term=None):
 
     if not term:
@@ -78,6 +86,8 @@ def search(request, term=None):
 ##
 #############
 
+
+@login_required
 def report(request, rid):
 
     report = get_object_or_404(Report, pk=rid)
@@ -85,6 +95,8 @@ def report(request, rid):
     return render_to_response('report.html', { 'report': report, 'reportactive': True, } , 
         context_instance=RequestContext(request))
 
+
+@login_required
 def approve(request, rid):
 
     report = get_object_or_404(Report, pk=rid)
@@ -97,6 +109,8 @@ def approve(request, rid):
 
     return HttpResponseRedirect('/r/' + str(report.pk))
 
+
+@login_required
 def flag(request, rid):
 
     report = get_object_or_404(Report, pk=rid)
@@ -115,6 +129,8 @@ def flag(request, rid):
 ##
 ###############
 
+
+@login_required
 def map(request):
 
     reports = Report.objects.filter(red_flagged=False).filter(~Q(lat=None)).filter(~Q(lon=None)).order_by('-date')
@@ -128,6 +144,8 @@ def map(request):
 ##
 ################
 
+
+@login_required
 def new(request):
 
     form = ReportForm()
@@ -187,6 +205,8 @@ def submit(request):
 ##
 #############
 
+
+@login_required
 def contact(request):
 
     return render_to_response('contact.html', { 'contactactive': True }, 
